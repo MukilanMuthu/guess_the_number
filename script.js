@@ -11,6 +11,21 @@ const message = document.querySelector('.message');
 const scoreBoard = document.querySelector('.score');
 const highScoreBoard = document.querySelector('.highscore');
 
+//reset function
+function reset(){
+    questionMark.textContent = '?';
+    secretNumber = Math.trunc(Math.random()*20)+1;
+    score = 20;
+    scoreBoard.textContent = score;
+    document.querySelector('.guess').value = '';
+    message.textContent = 'Start guessing...';
+}
+
+//game over function
+function gameOver(){
+    message.textContent = 'Game over';
+    questionMark.textContent = secretNumber;
+}
 
 //game function
 function game(){
@@ -20,6 +35,16 @@ function game(){
     }
     if (guess > 20 || guess < 1){
         message.textContent = 'Enter a number between 1 and 20';
+    }else if (score <= 0){ // game over condition
+        message.textContent = 'Press "Again!" to restart';
+        questionMark.textContent = secretNumber;
+    }else if (guess===secretNumber){
+        message.textContent = 'Hooray';
+        questionMark.textContent = secretNumber;
+        if(score > highScore){
+            highScore = score;
+            highScoreBoard.textContent = highScore;
+        }
     }else{
         if (guess < secretNumber){
             if (guess === secretNumber-1){
@@ -28,6 +53,9 @@ function game(){
                 message.textContent = 'Guess higher';
             }
             score--;
+            if (score <= 0){
+                gameOver();
+            }
             scoreBoard.textContent = score;
         }
         if (guess > secretNumber){
@@ -37,27 +65,12 @@ function game(){
                 message.textContent = 'Guess lower';
             }
             score--;
+            if (score <= 0){
+                gameOver();
+            }
             scoreBoard.textContent = score;
         }
-        if (guess===secretNumber){
-            message.textContent = 'Hooray';
-            questionMark.textContent = secretNumber;
-            if(score > highScore){
-                highScore = score;
-                highScoreBoard.textContent = highScore;
-            }
-        }   
     }
-}
-
-//reset function
-function reset(){
-    questionMark.textContent = '?';
-    secretNumber = Math.trunc(Math.random()*20)+1;
-    score = 20;
-    scoreBoard.textContent = score;
-    document.querySelector('.guess').value = '';
-    message.textContent = 'Start guessing...';
 }
 
 // adding event listeners
